@@ -1,0 +1,65 @@
+[
+  {
+    "name": "Canon EOS 700D Camera With 18-55mm Lens",
+    "price": 900,
+    "duration": "/day",
+    "picture": "https://bragpacker.com/wp-content/uploads/2017/03/Canon-EOS-700D-Camera-With-18-55mm-Lens.jpg",
+    "category": "Photography"
+  },
+  {
+    "name": "Canon RF 100-400mm f/5.6-8 IS USM Lens",
+    "price": 1200,
+    "duration": "/day",
+    "picture": "https://m.media-amazon.com/images/I/71n-P5LfulL._SL1500_.jpg",
+    "category": "Photography"
+  },
+  {
+    "name": "Nikon D500 21MP DSLR camera",
+    "price": 1250,
+    "duration": "/day",
+    "picture": "https://bragpacker.com/wp-content/uploads/2018/04/Nikon-D500-21MP-DSLR-camera.jpg",
+    "category": "Photography"
+  },
+  {
+    "name": "DJI Mini 2 - 4K Camera Drone",
+    "price": 4000,
+    "duration": "/day",
+    "picture": "https://www.designinfo.in/wp-content/uploads/nc/p/4/6/0/5/3/46053-485x485.jpg",
+    "category": "Adventure"
+  },
+  {
+    "name": "GoPro Hero 9 Black",
+    "price": 800,
+    "duration": "/day",
+    "picture": "https://futureforward.in/images/thumbs/010/0107072_gopro-hero-9-black.jpeg",
+    "category": "Adventure"
+  },
+  {
+    "name": "Olympus 10x50 DPS Binoculars",
+    "price": 750,
+    "duration": "/day",
+    "picture": "https://m.media-amazon.com/images/I/814Ow1gPIFL._AC_SS450_.jpg",
+    "category": "Photography"
+  },
+  {
+    "name": "Camping 2-Person Tent",
+    "price": 300,
+    "duration": "/day",
+    "picture": "https://contents.mediadecathlon.com/p202766/54f4fddcd865bae441efdaff909f37c5/p202766.jpg",
+    "category": "Camping"
+  },
+  {
+    "name": "2 Layer Fleece Waterproof Jacket",
+    "price": 500,
+    "duration": "/day",
+    "picture": "https://www.coolantarctica.com/Shop/antarctica-clothing/84996_CCRL.jpg",
+    "category": "Camping"
+  },
+  {
+    "name": " Riding Jacket - Level 2",
+    "price": 1000,
+    "duration": "/day",
+    "picture": "https://www.ahhelmets.in/15509-thickbox_default/tarmac-corsa-level-2-jacket-black.jpg",
+    "category": "Adventure"
+  }
+]
