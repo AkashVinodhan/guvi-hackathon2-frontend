@@ -8,10 +8,13 @@ import {
   Grid,
   Snackbar,
   Stack,
+  TextField,
   Typography,
 } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import React, { useState } from "react";
+import ModeEditIcon from "@mui/icons-material/ModeEdit";
+import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Products = ({
@@ -20,9 +23,13 @@ const Products = ({
   setfilteredProducts,
   cart,
   setCart,
+  isAdmin,
+  fetchProducts,
 }) => {
   const nav = useNavigate();
-
+  useEffect(() => {
+    fetchProducts();
+  }, []);
   const [category, setCategory] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -32,6 +39,7 @@ const Products = ({
       alert("Item is already in cart");
     } else {
       let item = products.filter((product) => product._id == _id)[0];
+      item.qty = 1;
       let dup = cart;
       dup.push(item);
       setCart(dup);
@@ -57,9 +65,25 @@ const Products = ({
     }
   };
 
+  //handle search
+  const handleSearch = (e) => {
+    let temp = products.filter(({ name }) =>
+      name.toLowerCase().includes(e.target.value.toLowerCase())
+    );
+    setfilteredProducts(temp);
+  };
+
   return (
     <>
-      <Stack direction={"row"} marginTop={2} sx={{ ml: "100px" }}>
+      <Stack
+        direction={"row"}
+        marginTop={"70px"}
+        sx={{
+          ml: "100px",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
         <Stack direction={"row"} spacing={1}>
           <Chip
             color={category == "All" ? "info" : "default"}
@@ -86,6 +110,25 @@ const Products = ({
             onClick={handleClick}
           />
         </Stack>
+        {isAdmin && (
+          <Button
+            size="small"
+            variant="contained"
+            onClick={() => nav("/products/new")}
+            startIcon={<AddCircleOutlineIcon />}
+            sx={{ backgroundColor: "#121210" }}
+          >
+            Add Product
+          </Button>
+        )}
+
+        <TextField
+          id="outlined-basic"
+          label="Search..."
+          variant="outlined"
+          onChange={handleSearch}
+          sx={{ marginRight: "100px" }}
+        />
       </Stack>
       <Grid container spacing={5} justifyContent="center" marginTop={3}>
         {filteredProducts.map(
@@ -98,6 +141,8 @@ const Products = ({
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-evenly",
+                  border: "1px solid grey",
+                  borderRadius: "10px",
                 }}
               >
                 <CardMedia sx={{ height: 140 }} image={picture} title={name} />
@@ -119,6 +164,17 @@ const Products = ({
                   >
                     Add to Cart
                   </Button>
+                  {isAdmin && (
+                    <Button
+                      size="small"
+                      variant="contained"
+                      onClick={() => nav("/products/" + _id)}
+                      startIcon={<ModeEditIcon />}
+                      sx={{ backgroundColor: "#121210" }}
+                    >
+                      Edit
+                    </Button>
+                  )}
                 </CardActions>
               </Card>
             </Grid>

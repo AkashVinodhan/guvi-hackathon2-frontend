@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -14,24 +14,40 @@ import { v4 as uuidv4 } from "uuid";
 //date
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DateTimePicker } from "@mui/x-date-pickers";
+import { DatePicker } from "@mui/x-date-pickers";
+import dayjs from "dayjs";
 
 const Cart = ({ cart, setCart }) => {
   const [total, setTotal] = useState(0);
   const [cartData, setCartData] = useState(cart);
 
   const calcTotal = () => {
-    let res = cartData.reduce(
-      (tot, curr) => tot + Number(curr.price) * Number(curr.qty),
-      0
-    );
+    let res = 0;
+    cartData.forEach((item) => {
+      const d1 = dayjs(item.end);
+      const d2 = dayjs(item.start);
+      const days = d1.diff(d2, "day");
+      res = res + +item.qty * +item.price * days;
+    });
     setTotal(res);
   };
+
+  useEffect(() => {
+    calcTotal();
+  }, []);
 
   function handleChange(e, id) {
     let index = cart.findIndex((item) => item._id == id);
     let temp = cart;
     temp[index].qty = e.target.value;
+    setCartData([...temp]);
+    calcTotal();
+  }
+
+  function handleDateChange(e, id, date) {
+    let index = cart.findIndex((item) => item._id == id);
+    let temp = cart;
+    temp[index][date] = e.$d;
     setCartData([...temp]);
     calcTotal();
   }
@@ -78,7 +94,7 @@ const Cart = ({ cart, setCart }) => {
       });
   };
   return (
-    <Box margin={5}>
+    <Box marginTop={"70px"} height={"100%"}>
       {cartData.map((item) => (
         <Paper
           key={item._id}
@@ -100,38 +116,64 @@ const Cart = ({ cart, setCart }) => {
             </Box>
             <Box m={1}>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker label="From" />
+                <DatePicker
+                  label="From"
+                  onChange={(e) => handleDateChange(e, item._id, "start")}
+                  defaultValue={dayjs(Date.now())}
+                />
               </LocalizationProvider>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DateTimePicker label="To" />
+                <DatePicker
+                  label="To"
+                  onChange={(e) => handleDateChange(e, item._id, "end")}
+                  defaultValue={dayjs(Date.now())}
+                />
               </LocalizationProvider>
             </Box>
             <TextField
               label="Quantity"
               type="number"
+              InputProps={{
+                inputProps: {
+                  min: 1,
+                },
+              }}
               InputLabelProps={{
                 shrink: true,
               }}
               variant="filled"
               onChange={(e) => handleChange(e, item._id)}
-              value={cartData.qty}
+              value={item.qty}
               required
             />
           </Stack>
         </Paper>
       ))}
       {cartData.length > 0 ? (
-        <Box>
-          {" "}
-          <Typography variant="h6">Total: ₹ {total} / day</Typography>
+        <Box
+          sx={{
+            height: "60px",
+            position: "absolute",
+            bottom: "0px",
+            left: "0px",
+            backgroundColor: "#0a0a0a",
+            width: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-around",
+          }}
+        >
+          <Typography variant="h6" color={"white"}>
+            Total: ₹ {total}
+          </Typography>
           <Button
             variant="contained"
             endIcon={<PaymentIcon />}
             onClick={handleOrder}
-            sx={{ backgroundColor: "#121210" }}
+            sx={{ backgroundColor: "#fff", color: "#000" }}
           >
             Pay
-          </Button>{" "}
+          </Button>
         </Box>
       ) : (
         <Typography variant="h4" align="center" color={"GrayText"}>

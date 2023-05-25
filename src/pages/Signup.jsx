@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { Box, Button, TextField, Toolbar } from "@mui/material";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const Contact = () => {
+const Signup = ({ isAdmin, setIsAdmin }) => {
+  const nav = useNavigate();
   let initial = {
-    name: "",
+    username: "",
     email: "",
-    description: "",
+    password: "",
   };
   const [data, setData] = useState(initial);
 
@@ -13,24 +16,27 @@ const Contact = () => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (data) => {
-    if (data.name && data.email && data.description) {
-      fetch("https://rental-d0go.onrender.com/messages", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-      // nav(-1);
-    }
+  const handleSubmit = (e, data) => {
+    e.preventDefault();
+    axios
+      .post("https://rental-d0go.onrender.com/signup", data, {
+        withCredentials: true,
+        credentials: "include",
+      })
+      .then((res) => {
+        console.log(res.data);
+        setIsAdmin(true);
+        nav("/products");
+      })
+      .catch((err) => alert(err.response.data));
   };
+
   //styles
   const inputBox = {
     m: 1,
     input: { color: "white" },
     label: { color: "white" },
-    width: "500px",
+    width: "250px",
     "& :-webkit-autofill": {
       transitionDelay: "9999s",
     },
@@ -51,53 +57,50 @@ const Contact = () => {
       }}
     >
       <Toolbar />
-      <h3 sx={{ m: 1 }}>Get in touch</h3>
+      <h3 sx={{ m: 1 }}>Signup</h3>
       <form>
         <TextField
           onChange={handleChange}
           sx={inputBox}
-          id="outlined-search"
-          label="Name"
-          name="name"
+          label="Username"
+          name="username"
           type="text"
-          value={data.name}
+          value={data.username}
           required
         />
         <br />
         <TextField
           onChange={handleChange}
-          id="outlined-search"
-          label="email"
+          sx={inputBox}
+          label="Email"
           name="email"
           type="text"
-          sx={inputBox}
           value={data.email}
           required
         />
         <br />
         <TextField
           onChange={handleChange}
-          id="outlined-multiline-static"
-          label="What would you like to discuss?"
-          name="description"
-          multiline
+          label="Password"
+          name="password"
+          type="password"
           sx={inputBox}
-          rows={4}
-          value={data.description}
+          value={data.password}
           required
         />
         <br />
+
         <Button
           type="submit"
           variant="contained"
           sx={{ m: 1 }}
-          onClick={() => handleSubmit(data)}
+          onClick={(e) => handleSubmit(e, data)}
         >
-          Send
+          Signup
         </Button>
       </form>
     </Box>
   );
 };
 
-export default Contact;
+export default Signup;
